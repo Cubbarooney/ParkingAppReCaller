@@ -5,8 +5,6 @@
              Title="{Binding ParkedCarLocation.Result.DateParked}">
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15" >
-            <Label Text="ID:" FontSize="Medium" />
-            <Label Text="{Binding ParkedCarLocation.Result.ID}" FontSize="Small"/>
             <Label Text="Location:" FontSize="Medium" />
             <Label Text="{Binding ParkedCarLocation.Result.LatLon}" FontSize="Small"/>
             <Label Text="Notes:" FontSize="Medium" />

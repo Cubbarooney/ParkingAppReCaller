@@ -52,7 +52,10 @@ namespace ParkingAppReCaller.Services
 
         public NotifyTaskCompletion(TResult syncItem)
         {
-            SetUpTask(new Task<TResult>(() => { return syncItem; }));
+            var task = new Task<TResult>(() => { return syncItem; });
+            // If we don't start the task, the thread will lock when the task is awaited upon
+            task.Start();            
+            SetUpTask(task);
         }
 
         public NotifyTaskCompletion(Task<TResult> task)

@@ -17,7 +17,7 @@ namespace ParkingAppReCaller.ViewModels
 
         public ParkingSpotViewModel()
         {
-            this.ParkedCarLocation = new NotifyTaskCompletion<ParkingSpot>(ParkingSpot.CreateNewParkingSpotAsync());
+            this.ParkedCarLocation = new NotifyTaskCompletion<ParkingSpot>(ParkingSpot.CreateAsync());
         }
     }
 }

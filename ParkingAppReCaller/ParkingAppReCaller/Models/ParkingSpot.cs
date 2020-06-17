@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Locations;
 using ParkingAppReCaller.Interfaces;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,35 +13,40 @@ namespace ParkingAppReCaller.Models
 {
     public class ParkingSpot
     {
-        private DateTime _dateParked;
-        private Guid _ID;
-        private Location _parkingLocation;
-
         public readonly static string FORMAT_STRING = "dd-MMM-yyyy hh:mmtt";
-        public string ID { get { return _ID.ToString(); } }
-        public string Notes;
-        public string DateParked
+        public string LatLon { get => Latitude + ", " + Longitude; }
+        public string DateString
         {
             get
             {
-                return _dateParked.ToLocalTime().ToString(FORMAT_STRING).ToUpper();
+                return DateParked
+                        .ToLocalTime()
+                        .ToString(FORMAT_STRING)
+                        .ToUpper();
             }
         }
-        public string Latitude { get { return _parkingLocation.Latitude.ToString(); } }
-        public string Longitude { get { return _parkingLocation.Longitude.ToString(); } }
-        public string LatLon { get { return Latitude + ", " + Longitude; } }
 
-        private ParkingSpot() { }
+        [PrimaryKey]
+        public Guid ID { get; set; }
+        public DateTime DateParked { get; set; }
+        public string Notes { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public float Accuracy { get; set; }
 
-        public static async Task<ParkingSpot> CreateNewParkingSpotAsync(string notes = null)
+        public static async Task<ParkingSpot> CreateAsync(string notes = null)
         {
-            return new ParkingSpot()
+            var loc = await DependencyService.Get<IDeviceLocationService>().GetLocationAsync();
+            return new ParkingSpot
             {
-                _dateParked = DateTime.UtcNow,
+                DateParked = DateTime.UtcNow,
                 Notes = notes == null ? notes : string.Empty,
-                _ID = Guid.NewGuid(),
-                _parkingLocation = await DependencyService.Get<IDeviceLocationService>().GetLocationAsync()
+                ID = Guid.NewGuid(),
+                Latitude = loc.Latitude.ToString(),
+                Longitude = loc.Longitude.ToString(),
+                Accuracy = loc.Accuracy,
             };
         }
+
     }
 }
