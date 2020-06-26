@@ -30,8 +30,8 @@ namespace ParkingAppReCaller.Models
         public Guid ID { get; set; }
         public DateTime DateParked { get; set; }
         public string Notes { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public float Accuracy { get; set; }
 
         public static async Task<ParkingSpot> CreateAsync(string notes = null)
@@ -42,8 +42,8 @@ namespace ParkingAppReCaller.Models
                 DateParked = DateTime.UtcNow,
                 Notes = notes == null ? notes : string.Empty,
                 ID = Guid.NewGuid(),
-                Latitude = loc.Latitude.ToString(),
-                Longitude = loc.Longitude.ToString(),
+                Latitude = loc.Latitude,
+                Longitude = loc.Longitude,
                 Accuracy = loc.Accuracy,
             };
         }

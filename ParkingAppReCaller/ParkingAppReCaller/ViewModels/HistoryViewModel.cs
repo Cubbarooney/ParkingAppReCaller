@@ -50,9 +50,7 @@ namespace ParkingAppReCaller.ViewModels
             try
             {
                 Spots.Clear();
-                var spots = await App.Database.GetItemsAsync();
-                spots.Sort((a, b) => DateTime.Compare(a.DateParked, b.DateParked));
-                spots.Reverse();
+                var spots = await App.Database.GetItemsSortedAsync();
                 
                 foreach(var spot in spots)
                 {

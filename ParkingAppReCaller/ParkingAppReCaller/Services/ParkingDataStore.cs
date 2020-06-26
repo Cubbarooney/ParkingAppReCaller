@@ -72,9 +72,24 @@ namespace ParkingAppReCaller.Services
             return GetItemAsync(new Guid(id));
         }
 
+        public async Task<ParkingSpot> GetMostRecentItemAsync()
+        {
+            var spots = await GetItemsSortedAsync();
+            return spots.FirstOrDefault();
+        }
+
         public Task<List<ParkingSpot>> GetItemsAsync()
         {
             return Database.Table<ParkingSpot>().ToListAsync();
+        }
+
+        public async Task<List<ParkingSpot>> GetItemsSortedAsync()
+        {
+            var spots = await GetItemsAsync();
+            spots.Sort((a, b) => DateTime.Compare(a.DateParked, b.DateParked));
+            spots.Reverse();
+
+            return spots;
         }
 
         public Task<int> UpdateItemAsync(ParkingSpot spot)
