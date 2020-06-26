@@ -2,12 +2,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:utils="clr-namespace:ParkingAppReCaller.Utils"
              x:Class="ParkingAppReCaller.Views.ParkingInfoPage"
              Title="{Binding ParkedCarLocation.Result.DateString}">
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15" >
             <Label Text="Location:" FontSize="Medium" />
-            <Label Text="{Binding ParkedCarLocation.Result.LatLon}" FontSize="Small"/>
+            <Label Text="{Binding ParkedCarLocation.Result.LatLon}"
+                   FontSize="Small"
+                   IsVisible="{Binding ParkedCarLocation.Result.HasLocation}"/>
+            <Label Text="Location data could not be retrieved"
+                   FontSize="Small"
+                   IsVisible="{Binding ParkedCarLocation.Result.HasLocation, Converter={utils:InverseBoolConverter}}"/>
             <Label Text="Notes:" FontSize="Medium" />
             <Label Text="{Binding ParkedCarLocation.Result.Notes}" FontSize="Small"/>
             <maps:Map x:Name="map">

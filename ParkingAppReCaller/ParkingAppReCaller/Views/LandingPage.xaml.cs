@@ -1,4 +1,5 @@
 ﻿using ParkingAppReCaller.Models;
+using ParkingAppReCaller.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,21 @@ namespace ParkingAppReCaller.Views
         async void OnDirectionsButtonClicked(object sender, EventArgs args)
         {
             var recentLocation = await App.Database.GetMostRecentItemAsync();
-            if (recentLocation != null)
+            if (recentLocation != null && recentLocation.HasLocation)
             {
-                var location = new Location(recentLocation.Latitude, recentLocation.Longitude);
+                var location = new Location((double)recentLocation.Latitude, (double)recentLocation.Longitude);
                 var options = new MapLaunchOptions { NavigationMode = NavigationMode.Walking };
 
                 await Map.OpenAsync(location, options);
             }
-            // TODO: Handle null
+            else if (recentLocation == null)
+            {
+                await DisplayAlert(Constants.Alerts.TITLE, Constants.Alerts.NO_LOCATION, Constants.Alerts.OK);
+            }
+            else
+            {
+                await DisplayAlert(Constants.Alerts.TITLE, Constants.Alerts.NO_GPS, Constants.Alerts.OK);
+            }
         }
 
     }

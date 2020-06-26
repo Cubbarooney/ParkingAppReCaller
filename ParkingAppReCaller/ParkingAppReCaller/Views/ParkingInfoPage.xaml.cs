@@ -1,4 +1,5 @@
 ﻿using ParkingAppReCaller.Models;
+using ParkingAppReCaller.Utils;
 using ParkingAppReCaller.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace ParkingAppReCaller.Views
         {
             if (viewModel.ParkedCarLocation.IsCompleted)
             {
-                MoveMapToLocation();
+                MapUtils.MoveMapToLocation(map, viewModel.ParkedCarLocation.Result);
             }
             else
             {
@@ -49,29 +50,12 @@ namespace ParkingAppReCaller.Views
             }
         }
 
-        private void MoveMapToLocation()
-        {
-            var loc = viewModel.ParkedCarLocation.Result;
-            var pos = new Position(loc.Latitude, loc.Longitude);
-            var pin = new Pin
-            {
-                Label = "Parking Spot: " + loc.DateString,
-                Address = loc.Notes,
-                Position = pos,
-                Type = PinType.Place,
-            };
-
-            map.IsShowingUser = true;
-            map.MoveToRegion(new MapSpan(pos, 0.01, 0.01));
-            map.Pins.Add(pin);
-        }
-
         private void ParkedCarLocation_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case "IsCompleted":
-                    MoveMapToLocation();
+                    MapUtils.MoveMapToLocation(map, viewModel.ParkedCarLocation.Result);
                     break;
             }
         }

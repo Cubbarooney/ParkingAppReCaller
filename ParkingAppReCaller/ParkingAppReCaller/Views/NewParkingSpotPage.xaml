@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:utils="clr-namespace:ParkingAppReCaller.Utils"
              x:Class="ParkingAppReCaller.Views.NewParkingSpotPage"
              Title="New Parking Spot">
     <ContentPage.ToolbarItems>
@@ -11,12 +13,20 @@
             <Label Text="Date:" FontSize="Medium" />
             <Label Text="{Binding ParkedCarLocation.Result.DateString}" FontSize="Small"/>
             <Label Text="Location:" FontSize="Medium" />
-            <Label Text="{Binding ParkedCarLocation.Result.LatLon}" FontSize="Small"/>
+            <Label Text="{Binding ParkedCarLocation.Result.LatLon}"
+                   FontSize="Small"
+                   IsVisible="{Binding ParkedCarLocation.Result.HasLocation}"/>
+            <Label Text="Location data could not be retrieved"
+                   FontSize="Small"
+                   IsVisible="{Binding ParkedCarLocation.Result.HasLocation, Converter={utils:InverseBoolConverter}}"/>
             <Label Text="Notes:" FontSize="Medium"/>
             <Editor Text="{Binding ParkedCarLocation.Result.Notes}"
                     FontSize="Small"
                     Margin="0"
                     AutoSize="TextChanges"/>
+            <maps:Map x:Name="map">
+
+            </maps:Map>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
